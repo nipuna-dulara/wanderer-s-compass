@@ -1,8 +1,27 @@
 import Image from 'next/image'
 import wandererLogo from '../src/logotp.png'
 import { useRouter } from 'next/router'
+import { ReactNode } from 'react';
+import appContext from '@/context/context';
+import { useContext } from 'react';
 export default function Navbar() {
   const router = useRouter();
+  const context = useContext(appContext);
+
+  console.log(context.nameContext)
+  const id = context.nameContext;
+  //context.setNameContext("default");
+
+  const Conditional = ({
+    showWhen,
+    children
+  }: {
+    showWhen: boolean;
+    children: ReactNode;
+  }) => {
+    if (showWhen) return <>{children}</>
+    return <></>
+  }
   return (
 
     <nav className="bg-white fixed w-full z-20 top-0 left-0 border-b border-red-700 dark:border-red-700 max-h-20">
@@ -15,8 +34,16 @@ export default function Navbar() {
 
         </a>
         <div className="flex md:order-2">
-          <button type="button" className="text-white bg-red-700 hover:bg-red-900 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 ml-10 text-center mr-3 md:mr-0 " onClick={() => { router.push('/create') }}>Get Yours</button>
-          <button type="button" className="text-white bg-red-700 hover:bg-red-900 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2  text-center mr-6 md:mr-0 ">Create New</button>
+          <Conditional showWhen={(id != "default")}>
+            <>
+              <button type="button" className="text-white bg-red-700 hover:bg-red-900 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 ml-10 text-center mr-3 md:mr-0 " onClick={() => { router.push('/generator') }} >Get Yours</button>
+              <button type="button" className="text-white bg-red-700 hover:bg-red-900 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2  text-center mr-6 md:mr-0 " onClick={() => { router.push('/create') }}>Add New</button></>
+          </Conditional>
+          <Conditional showWhen={(id == "default")}>
+            <>
+              <button type="button" className="text-white bg-red-700 hover:bg-red-900 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 ml-10 text-center mr-3 md:mr-0 " onClick={() => { router.push('/signup') }}>Sign up</button>
+              <button type="button" className="text-white bg-red-700 hover:bg-red-900 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2  text-center mr-6 md:mr-0 " onClick={() => { router.push('/signin') }}>Sign in</button></>
+          </Conditional>
           <button data-collapse-toggle="navbar-sticky" type="button" className="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-sticky" aria-expanded="false">
             <span className="sr-only">Open main menu</span>
             <svg className="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
