@@ -36,13 +36,13 @@ export default function Navbar() {
         <div className="flex md:order-2">
           <Conditional showWhen={(id != "default")}>
             <>
-              <button type="button" className="text-white bg-red-700 hover:bg-red-900 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 ml-10 text-center mr-3 md:mr-0 " onClick={() => { router.push('/generator') }} >Get Yours</button>
-              <button type="button" className="text-white bg-red-700 hover:bg-red-900 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2  text-center mr-6 md:mr-0 " onClick={() => { router.push('/create') }}>Add New</button></>
+              <button type="button" className="text-white bg-red-700 hover:bg-red-900 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 ml-10 text-center mr-3 md:mr-2 " onClick={() => { router.push('/generator') }} >Get Yours</button>
+              <button type="button" className="text-white bg-red-700 hover:bg-red-900 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2  text-center mr-6 md:mr-2 " onClick={() => { router.push('/create') }}>Add New</button></>
           </Conditional>
           <Conditional showWhen={(id == "default")}>
             <>
-              <button type="button" className="text-white bg-red-700 hover:bg-red-900 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 ml-10 text-center mr-3 md:mr-0 " onClick={() => { router.push('/signup') }}>Sign up</button>
-              <button type="button" className="text-white bg-red-700 hover:bg-red-900 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2  text-center mr-6 md:mr-0 " onClick={() => { router.push('/signin') }}>Sign in</button></>
+              <button type="button" className="text-white bg-red-700 hover:bg-red-900 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 ml-10 text-center mr-3 md:mr-2 " onClick={() => { router.push('/signup') }}>Sign up</button>
+              <button type="button" className="text-white bg-red-700 hover:bg-red-900 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2  text-center mr-6 md:mr-2 " onClick={() => { router.push('/signin') }}>Sign in</button></>
           </Conditional>
           <button data-collapse-toggle="navbar-sticky" type="button" className="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-sticky" aria-expanded="false">
             <span className="sr-only">Open main menu</span>
