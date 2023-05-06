@@ -14,6 +14,7 @@ import { getFirestore } from "firebase/firestore";
 import { collection, addDoc, doc, setDoc } from "firebase/firestore";
 import appContext from '@/context/context';
 import { useContext } from 'react';
+import background from "../../src/background.png";
 const firebaseConfig = {
     apiKey: "AIzaSyBY4AltQX22w-OP39_Mhld1tZrNuXDRLwI",
     authDomain: "wanderers-compass.firebaseapp.com",
@@ -331,7 +332,7 @@ export default function generator() {
             <p className='text-black-600'>{name.name}</p>
         </div>)
         return (
-            <div className='rounded p-1  shadow-md flex-row flex-1 w-100 bg-gray-50'>
+            <div className='rounded p-1  shadow-md flex-col flex-1 w-100 bg-gray-50'>
                 <div className='flex m2 w-50 rounded  '>
                     <p className='font-semibold font-sans'>Places</p>
                 </div>
@@ -349,10 +350,10 @@ export default function generator() {
                     Day  {comp.id}
                 </a>
 
-                <div className={`p-3 rounded-lg  bg-gray-50 flex`}>
+                <div className={`p-3 rounded-lg w-9/12 flex`}>
 
                     <Places places={comp.places} />
-                    <div className='rounded p-1 ml-8  w-50 shadow-sm flex-row flex-1 bg-yellow-50'>
+                    <div className='rounded p-1 ml-8  w-100 shadow-sm flex-row flex-1 bg-yellow-50'>
                         <div className='flex-row'>
                             <p className='font-semibold font-sans'>Hotel</p>
                             <p >TBI</p>
@@ -372,8 +373,8 @@ export default function generator() {
         })
         return (
 
-            <div className='mt-3'>
-                <div className={`flex justify-end mb-4`}>
+            <div className='mt-3 bg-gradient-to-r from-white to-red-200' >
+                <div className={`flex justify-end mb-4`} style={{ backgroundImage: `url(${background})` }}>
 
                     <div className={`p-4 rounded-lg max-w-xs bg-red-700 text-white`}>
                         <p className="text-sm">Hi welcome to the Wanderer's compass</p>
@@ -393,7 +394,7 @@ export default function generator() {
     }
     return (
 
-        <div className="pl-5 pr-5">
+        <div className="pl-5 pr-5" >
             <Chat />
             <ChatPrompt />
         </div>)
