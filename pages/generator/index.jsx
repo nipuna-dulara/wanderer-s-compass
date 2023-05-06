@@ -11,10 +11,12 @@ import axios from 'axios';
 import ClearIcon from '@mui/icons-material/Clear';
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
+import EditIcon from '@mui/icons-material/Edit';
 import { collection, addDoc, doc, setDoc } from "firebase/firestore";
 import appContext from '@/context/context';
 import { useContext } from 'react';
 import background from "../../src/background.png";
+import DeleteIcon from '@mui/icons-material/Delete';
 const firebaseConfig = {
     apiKey: "AIzaSyBY4AltQX22w-OP39_Mhld1tZrNuXDRLwI",
     authDomain: "wanderers-compass.firebaseapp.com",
@@ -47,7 +49,7 @@ const app = initializeApp(firebaseConfig);
 export default function generator() {
     const [plan, setPlan] = useState([])
     const [place, setPlace] = useState(true)
-
+    const [showEdits, setShowEdits] = useState(false)
     const router = useRouter()
     const [prompt, setPrompt] = useState('')
     const [Cid, setCid] = useState(0);
@@ -61,6 +63,7 @@ export default function generator() {
 
 
     const context = useContext(appContext)
+    //recomended places component
     function RecommendedPlaces({ places }) {
         const [links, setLinks] = useState([])
 
@@ -128,6 +131,8 @@ export default function generator() {
                                     console.log(plan)
                                     setPlaces([])
                                     setShowRec(false)
+                                    setCid(plan.length)
+
                                 }
                             }}>
                                 <img src={`http://127.0.0.1:8000/images/${place.image}`} alt={place.name} className="w-full h-20 object-cover mb-2 rounded-lg" />
@@ -144,32 +149,56 @@ export default function generator() {
             )
         } else { return <div></div> }
     }
+
+    //chat prompt component
     function ChatPrompt({ onPrompt }) {
         const [inputValue, setInputValue] = useState('');
-        useEffect(() => {
-            const fetchPlaceData = async () => {
-                try {
-                    const updatedPlaces = await Promise.all(
-                        places.map(async (place) => {
-                            const q = query(collection(db, 'Places'), where('name', '==', place.name));
-                            const querySnapshot = await getDocs(q);
-                            querySnapshot.forEach((doc) => {
-                                place = { ...place, ...doc.data() };
-                            });
-                            return place;
-                        })
-                    );
+        const fetchPlaceData = async () => {
+            try {
+                const updatedPlaces = await Promise.all(
+                    places.map(async (place) => {
+                        const q = query(collection(db, 'Places'), where('name', '==', place.name));
+                        const querySnapshot = await getDocs(q);
+                        querySnapshot.forEach((doc) => {
+                            place = { ...place, ...doc.data() };
+                        });
+                        return place;
+                    })
+                );
 
-                    setPlaces2(updatedPlaces);
-                } catch (error) {
-                    console.log(error);
-                }
-            };
-
-            if (places.length > 0) {
-                fetchPlaceData();
+                setPlaces2(updatedPlaces);
+            } catch (error) {
+                console.log(error);
             }
-        }, [places, db]);
+        };
+
+        if (places.length > 0) {
+            fetchPlaceData();
+        }
+        // useEffect(() => {
+        //     const fetchPlaceData = async () => {
+        //         try {
+        //             const updatedPlaces = await Promise.all(
+        //                 places.map(async (place) => {
+        //                     const q = query(collection(db, 'Places'), where('name', '==', place.name));
+        //                     const querySnapshot = await getDocs(q);
+        //                     querySnapshot.forEach((doc) => {
+        //                         place = { ...place, ...doc.data() };
+        //                     });
+        //                     return place;
+        //                 })
+        //             );
+
+        //             setPlaces2(updatedPlaces);
+        //         } catch (error) {
+        //             console.log(error);
+        //         }
+        //     };
+
+        //     if (places.length > 0) {
+        //         fetchPlaceData();
+        //     }
+        // }, [places, db]);
 
         async function handleSubmit() {
             if (place) {
@@ -290,6 +319,19 @@ export default function generator() {
                                 <button
                                     type="submit"
                                     className="mt-2 bg-red-800 hover:bg-red-900 text-white font-bold py-2 px-4 rounded-md"
+                                    onClick={() => {
+                                        setShowEdits(true)
+
+                                    }
+                                    } >
+
+                                    <EditIcon />
+
+                                </button></div>
+                            <div className='flex-item ml-3'>
+                                <button
+                                    type="submit"
+                                    className="mt-2 bg-red-800 hover:bg-red-900 text-white font-bold py-2 px-4 rounded-md"
                                     onClick={async () => {
                                         console.log("fuck");
                                         try {
@@ -319,6 +361,7 @@ export default function generator() {
                                     <ClearIcon />
 
                                 </button></div>
+
                         </div>
 
                     </div>
@@ -326,39 +369,84 @@ export default function generator() {
 
         );
     };
-    function Places({ places }) {
+    //places components
+    function Places({ places, id }) {
+        const [, updateState] = React.useState();
+        const forceUpdate = React.useCallback(() => updateState({}), []);
+        const list = places.map((name) => {
+            if (name.name != "Deleted") {
+                return <div className='flex p-1 shadow-md w-50 m-2 rounded bg-red-200' >
+                    <p className='text-black-600 flex'>{name.name}</p>
+                    {showEdits && <button className='flex float-right w-4' onClick={() => {
+                        console.log("ran")
+                        setPlan(
+                            plan.map((x) => {
 
-        const list = places.map((name) => <div className='flex p-1 shadow-md w-50 m-2 rounded bg-red-200'>
-            <p className='text-black-600'>{name.name}</p>
-        </div>)
+                                if (x.id == id) {
+
+                                    return {
+                                        id: x.id,
+                                        places: x.places.map((place) => {
+                                            console.log(place.name + ' ' + name.name)
+                                            if (place.name != name.name) {
+                                                return place;
+                                            } else {
+                                                return { name: "Deleted" }
+                                            }
+                                        }),
+                                        hotel: x.hotel
+
+                                    }
+
+                                } else {
+                                    return x
+                                }
+                            })
+
+                        )
+                        console.log(plan)
+                        // forceUpdate;
+                    }
+                    } ><DeleteIcon /></button>}
+                </div>
+            } else {
+                return <div></div>
+            }
+        })
         return (
             <div className='rounded p-1  shadow-md flex-col flex-1 w-100 bg-gray-50'>
                 <div className='flex m2 w-50 rounded  '>
                     <p className='font-semibold font-sans'>Places</p>
                 </div>
                 {list}
+                {showEdits && <a className='flex' onClick={() => { setCid(id) }}><AddCircleOutlineIcon></AddCircleOutlineIcon></a>}
             </div>
         )
     }
+
+
+    //day component
     function Day({ comp }) {
 
 
         return (
             <div className={`flex justify-start w-auto mb-4`}>
 
-                <a className="h-8 w-8 rounded-full mr-4 font-mono font-bold" >
+                <a className="h-12 w-11 rounded mr-4 bg-gray-800 justify-center text-center content-center text-white font-mono font-bold" >
                     Day  {comp.id}
                 </a>
 
-                <div className={`p-3 rounded-lg w-9/12 flex`}>
+                <div className={`pl-3 pr-3 pb-4rounded-lg w-9/12 flex`}>
 
-                    <Places places={comp.places} />
-                    <div className='rounded p-1 ml-8  w-100 shadow-sm flex-row flex-1 bg-yellow-50'>
+                    <Places places={comp.places} id={comp.id} />
+                    <div className='rounded p-1 ml-8  w-100 shadow-md flex-row flex-1 bg-gray-50'>
                         <div className='flex-row'>
                             <p className='font-semibold font-sans'>Hotel</p>
                             <p >TBI</p>
                         </div>
                     </div>
+
+
                 </div>
 
             </div>
@@ -366,6 +454,7 @@ export default function generator() {
     };
 
     function Chat() {
+
         const chats = plan.map((comp) => {
 
             return (
