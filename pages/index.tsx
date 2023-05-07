@@ -27,7 +27,7 @@ export default function Home() {
       <IntroComponent />
 
       <br />
-      {/* <TravelPlansComponent /> */}
+      <TravelPlansComponent />
     </main>
   )
 }
