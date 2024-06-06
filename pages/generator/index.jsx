@@ -86,7 +86,10 @@ function FirstChatPrompt({ onPrompt }) {
             setInputValue(inputValue.toLowerCase() + x);
         })
         console.log(days)
-        await axios.get('http://127.0.0.1:5000/plan/' + inputValue)
+        if (days == null) {
+            days = 2;
+        }
+        await axios.get('http://127.0.0.1:5000/getPlan?data=' + inputValue + '&days=' + days)
             .then(function (response) {
                 console.log(response);
                 console.log(response.data.data)
@@ -121,7 +124,7 @@ function FirstChatPrompt({ onPrompt }) {
                         onChange={(event) => {
                             setInputValue(event.target.value)
                         }}
-                        className="w-full border border-red-900 focus:outline-none text-black border-gray-300 rounded-md p-2"
+                        className="w-full border text-3xl border-red-900 focus:outline-none text-black border-gray-300 rounded-md p-2"
                     />
                     <br />
                     <TravelPreferences />

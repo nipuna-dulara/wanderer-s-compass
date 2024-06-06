@@ -1,9 +1,19 @@
-function ChatPrompt({ onPrompt }) {
+function FirstChatPrompt({ onPrompt }) {
     const [inputValue, setInputValue] = useState('');
 
 
     async function handleSubmit() {
-
+        setInputValue(inputValue.toLowerCase())
+        const stringArray  = inputValue.split(" ");
+        let i = 0;
+        let days;
+        for (x in stringArray){
+            
+            if(x == "days" || x == "day"){
+                days = stringArray[i-1];
+            }
+            i = i+ 1;
+        }
 
     };
 
@@ -47,3 +57,4 @@ function ChatPrompt({ onPrompt }) {
 
     );
 };
+export default FirstChatPrompt;

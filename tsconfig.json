@@ -31,7 +31,7 @@
     "components/addComponents/addHotel.jsx",
     "pages/_app.jsx",
     "context/context.jsx"
-  ],
+, "components/addComponents/addPlaces.jsx"  ],
   "exclude": [
     "node_modules"
   ]

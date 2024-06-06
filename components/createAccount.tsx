@@ -29,9 +29,7 @@ export default function CreateAccount() {
     const [cookies, setCookie] = useCookies(['user'])
     const context = useContext(appContext);
     const [contextId, setContextId] = useState('default');
-    function changeNameContext(x: string) {
-        context.setNameContext(x)
-    }
+
     async function userNamePassword(username: string, password: string) {
         const db = getFirestore(app);
         let k = "";
